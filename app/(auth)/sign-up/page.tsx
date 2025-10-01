@@ -37,7 +37,7 @@ const SignUp = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <InputField
-                    name="fullname"
+                    name="fullName"
                     label="Full Name"
                     placeholder="John Doe"
                     register={register}
@@ -51,7 +51,11 @@ const SignUp = () => {
                     placeholder="contact@jsmastery.com"
                     register={register}
                     error={errors.email}
-                    validation={{ required: 'Email is required', pattern: /^\w+@\w+\.\w+$/, message: 'Email address is required' }}
+                    validation={{
+                        required: 'Email is required',
+                        pattern: /^\w+@\w+\.\w+$/,
+                        message: 'Email address is required'
+                    }}
                 />
 
                 <InputField
