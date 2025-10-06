@@ -16,14 +16,12 @@ import {useRouter} from "next/navigation";
 import {LogOut} from "lucide-react";
 import NavItems from "@/components/NavItems";
 
-const UserDropdownMenu = ()=> {
+const UserDropdownMenu = ({ user }: { user: User })=> {
     const router = useRouter();
 
     const handleSignout = () => {
         router.push('/sign-in');
     };
-
-    const user = { name: 'John', email: 'contact@jsmastery.com' };
 
     return (
         <DropdownMenu>
