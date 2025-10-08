@@ -41,7 +41,7 @@ const isValidArticle = (
 
 const uniqueKey = (a: FinnhubArticle | MarketNewsArticle): string => {
   const idVal = (a as { id?: number }).id;
-  if (typeof idVal === 'number') return String(idVal);
+  if (typeof idVal === 'number' && idVal > 0) return String(idVal);
   if (a.url) return a.url;
   if (a.headline) return a.headline;
   // 予備のキー（衝突しづらい値で代替）
