@@ -1,0 +1,73 @@
+アプリ用のウォッチリストシステムを構築する必要があります。以下を実装してください:
+
+1. Watchlist モデル (/database/models/watchlist.model.ts)
+
+* Watchlist コレクション用の Mongoose スキーマを作成する。
+* フィールド:
+
+* userId（string、必須、インデックス）
+* symbol（string、必須、大文字、トリム）
+* company（string、必須、トリム）
+* addedAt（date、デフォルト: 現在時刻）
+* userId + symbol の複合インデックスを追加し、同一ユーザーが同じ銘柄を二重追加できないようにする。
+* 上記フィールドを持つインターフェース WatchlistItem（Document を継承）をエクスポートする。
+* ホットリロード問題を避けるため、models?.Watchlist || model パターンを用いる。
+
+2. Watchlist アクション (/lib/actions/watchlist.actions.ts)
+
+* "use server" を追加する。
+* 関数 getWatchlistSymbolsByEmail(email: string): Promise<string[]> を実装する。
+* 仕様:
+
+* データベースに接続する。
+* user コレクション（Better Auth）で email によってユーザーを検索する。
+* ユーザーが存在しない場合は空配列を返す。
+* 見つかった場合、userId で Watchlist を検索し、シンボルのみを文字列配列で返す。
+* エラーはキャッチしてログに出力し、空配列を返す。
+
+3. Finnhub アクション (/lib/actions/finnhub.actions.ts)
+
+* "use server" を追加する。
+* FINNHUB_BASE_URL と NEXT_PUBLIC_FINNHUB_API_KEY の定数を定義する。
+* fetchJSON(url, revalidateSeconds?) を実装する:
+
+* revalidateSeconds が渡された場合、cache: force-cache と next.revalidate を使用する。
+* それ以外は cache: no-store を使用する。
+* 200 以外のステータスは例外を投げる。
+* getNews(symbols?: string[]) を実装する:
+
+* 直近5日分の期間を算出する。
+* symbols がある場合:
+
+* クリーニングして大文字化する。
+* 最大 6 回ループし、シンボルをラウンドロビンで回す。
+* 各シンボルの企業ニュースを取得する。
+* 各ラウンドで有効な記事を 1 件取得する。
+* 収集後、datetime でソートして返す。
+* symbols がない場合:
+
+* 一般市場ニュースを取得する。
+* id/url/headline で重複排除する。
+* 上位 6 件を取得し、整形する。
+* 常に整形前に記事を検証する。
+* エラーはキャッチしてログに出力し、"Failed to fetch news" を投げる。
+
+4. Inngest 関数 (/lib/inngest/functions.ts)
+
+* 既存の sendSignUpEmail（パーソナライズ導入済み AI）を維持する。
+* sendDailyNewsSummary を追加する:
+
+* 毎日 UTC 正午（12:00）の cron と、イベント app/send.daily.news でトリガー。
+* ステップ 1: 全ユーザー取得（getAllUsersForNewsEmail）。
+* ステップ 2: 各ユーザーについて、ウォッチリストのシンボルを取得 → ニュース取得（なければ一般ニュース）。
+* ステップ 3: （プレースホルダー）AI でニュース要約。
+* ステップ 4: （プレースホルダー）メール送信。
+* 最後に { success: true } を返す。
+
+Key rules:
+
+* 必要に応じて /lib/utils.ts の関数を使用する。
+* 常にフェイルセーフ：ユーザー不在またはニュースなしの場合は空配列を返す。
+* ユーザーごとの記事は最大 6 件。
+* シンボルニュースはラウンドロビン、空なら一般ニュースへフォールバック。
+* すべて強い型付け、any は使わない。

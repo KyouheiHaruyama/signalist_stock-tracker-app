@@ -1,0 +1,73 @@
+We need to set up a watchlist system for our app. Here’s what you should build:
+
+1. Watchlist model (/database/models/watchlist.model.ts)
+
+* Create a Mongoose schema for a Watchlist collection.
+* Fields:
+
+* userId (string, required, indexed)
+* symbol (string, required, uppercase, trimmed)
+* company (string, required, trimmed)
+* addedAt (date, default: now)
+* Add a compound index on userId + symbol so a user can’t add the same stock twice.
+* Export an interface WatchlistItem extends Document with those fields.
+* Use the models?.Watchlist || model pattern to avoid hot-reload issues.
+
+2. Watchlist actions (/lib/actions/watchlist.actions.ts)
+
+* Add "use server".
+* Write a function getWatchlistSymbolsByEmail(email: string): Promise<string[]>.
+* It should:
+
+* Connect to the database.
+* Find the user by email in the user collection (Better Auth).
+* If no user, return an empty array.
+* If found, query the Watchlist by userId, return just the symbols as strings.
+* Catch errors, log them, return an empty array.
+
+3. Finnhub actions (/lib/actions/finnhub.actions.ts)
+
+* Add "use server".
+* Define constants for FINNHUB_BASE_URL and NEXT_PUBLIC_FINNHUB_API_KEY.
+* Write fetchJSON(url, revalidateSeconds?):
+
+* If revalidateSeconds is passed, use cache: force-cache with next.revalidate.
+* Otherwise use cache: no-store.
+* Throw on non-200 responses.
+* Write getNews(symbols?: string[]):
+
+* Compute date range for last 5 days.
+* If symbols exist:
+
+* Clean and uppercase them.
+* Loop max 6 times, round-robin through symbols.
+* Fetch company news for each symbol.
+* Take one valid article per round.
+* Collect, sort by datetime, return.
+* If no symbols:
+
+* Fetch general market news.
+* Deduplicate by id/url/headline.
+* Take top 6, format them.
+* Always validate articles before formatting.
+* Catch errors, log, throw Failed to fetch news.
+
+4. Inngest functions (/lib/inngest/functions.ts)
+
+* Keep the existing sendSignUpEmail (already uses AI for personalized intro).
+* Add sendDailyNewsSummary:
+
+* Triggered by cron at 12 PM UTC daily, and event app/send.daily.news.
+* Step 1: get all users (getAllUsersForNewsEmail).
+* Step 2: For each user, get their watchlist symbols → fetch news (or general if none).
+* Step 3: (placeholder) Summarize news via AI.
+* Step 4: (placeholder) Send the emails.
+* Return { success: true } at the end.
+
+Key rules:
+
+* Use the functions from /lib/utils.ts file when needed.
+* Always fail gracefully: if user not found or no news, return an empty array.
+* Max 6 articles per user.
+* Round-robin for symbol news, fallback to general if empty.
+* Strong typing everywhere, no any.
