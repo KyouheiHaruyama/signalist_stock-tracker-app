@@ -98,11 +98,11 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
                   </div>
               ) : (
                   <>
+                      <div className="search-count">
+                          {isSearchMode ? 'Search results' : 'Popular stocks'}
+                          {` `}({displayStocks?.length || 0})
+                      </div>
                       <ul>
-                          <div className="search-count">
-                              {isSearchMode ? 'Search results' : 'Popular stocks'}
-                              {` `}({displayStocks?.length || 0})
-                          </div>
                           {displayStocks?.map((stock, i) => (
                               <li key={stock.symbol} className="search-item">
                                 <Link href={`/stock/${stock.symbol}`} onClick={handleSelectStock} className="search-item-link">
