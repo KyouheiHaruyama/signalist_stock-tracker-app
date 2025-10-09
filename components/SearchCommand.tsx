@@ -105,7 +105,7 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
                       <ul>
                           {displayStocks?.map((stock, i) => (
                               <li key={stock.symbol} className="search-item">
-                                <Link href={`/stock/${stock.symbol}`} onClick={handleSelectStock} className="search-item-link">
+                                <Link href={`/stocks/${stock.symbol}`} onClick={handleSelectStock} className="search-item-link">
                                     <TrendingUp className="h-4 w-4 text-gray-500" />
                                     <div className="flex-1">
                                         <div className="search-item-name">
