@@ -5,12 +5,10 @@ import {
   CommandDialog,
   CommandInput,
   CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
+  CommandEmpty
 } from '@/components/ui/command';
 import {Button} from "@/components/ui/button";
-import {Loader2, Star, TrendingUp} from "lucide-react";
+import {Loader2, TrendingUp} from "lucide-react";
 import Link from "next/link";
 import {searchStocks} from "@/lib/actions/finnhub.actions";
 import {useDebounce} from "@/hooks/useDebounce";
@@ -111,12 +109,6 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
                       ))}
                   </ul>
               )}
-            <CommandEmpty></CommandEmpty>
-            <CommandGroup heading="Stocks">
-              <CommandItem onSelect={handleSelectStock}>AAPL</CommandItem>
-              <CommandItem onSelect={handleSelectStock}>MSFT</CommandItem>
-              <CommandItem onSelect={handleSelectStock}>GOOGL</CommandItem>
-            </CommandGroup>
           </CommandList>
         </CommandDialog>
       </>
