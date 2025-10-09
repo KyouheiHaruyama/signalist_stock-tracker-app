@@ -1,0 +1,171 @@
+PERSONALIZED_WELCOME_EMAIL_PROMPT:
+メールテンプレート内の {{intro}} プレースホルダーに挿入される、高度にパーソナライズされた HTML コンテンツを生成してください。
+
+ユーザープロファイルデータ:
+{{userProfile}}
+
+パーソナライズ要件:
+以下を満たし、このユーザー「固有」であることが明確に分かるコンテンツを作成してください。
+
+重要: パーソナライズされた本文の冒頭を "Welcome" で始めないでください（メールのヘッダーに "Welcome aboard {{name}}" が既に含まれます）。代わりに "Thanks for joining"、"Great to have you"、"You're all set"、"Perfect timing" などを使用してください。
+
+1. ユーザー情報への直接言及: プロファイルから具体的な情報を抽出して活用すること
+   - 投資目標や目的（正確な表現）
+   - リスク許容度のレベル
+   - 言及されている好みのセクター／業界
+   - 経験レベルや背景
+   - 興味のある特定の銘柄／企業
+   - 投資期間（短期・長期・リタイアメントなど）
+
+2. 文脈に沿ったメッセージング: ユーザーの状況を理解していることが伝わる内容にする
+   - 投資初心者 → 学習／最初の一歩に触れる
+   - 経験豊富なトレーダー → 高度なツール／戦略強化に触れる
+   - リタイアメント計画 → 長期の資産形成に触れる
+   - 特定セクター志向 → その業界名を明示的に言及
+   - 保守的アプローチ → 安全性や情報に基づく意思決定を強調
+   - 積極的アプローチ → 機会や成長可能性を強調
+
+3. パーソナルなタッチ: 自分宛てに書かれていると感じられる表現にする
+   - ユーザーの目標をメッセージに織り込む
+   - 興味対象を直接参照する
+   - 機能をユーザーの具体的ニーズに結び付ける
+   - 「理解されている・見てもらえている」と感じさせる
+
+重要な書式要件:
+- マークダウンやコードブロック、バッククォートなしの「純粋な HTML コンテンツ」のみを返すこと
+- 単一段落のみを使用: <p class="mobile-text" style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">content</p>
+- ちょうど2文で書く（現状の1文にもう1文追加）
+- 総語数は 35〜50 語で可読性を保つ
+- 重要なパーソナライズ要素（目標、セクター等）は <strong> を使用
+- "Here's what you can do right now:" はテンプレート側にあるため含めない
+- すべての語をパーソナライズのために有効活用する
+- 2文目は、文脈の補足やパーソナライズの強化に充てる
+
+パーソナライズされた出力例（2文で、明確なカスタマイズが伝わるもの）:
+<p class="mobile-text" style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">Signalist へのご参加ありがとうございます！<strong>テクノロジー成長株</strong>に注力しているあなたに、追跡中の企業に似たリアルタイムアラートが最適です。メインストリーム化する前のチャンスを見つけるお手伝いをします。</p>
+
+<p class="mobile-text" style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">ご参加、心より歓迎します！あなたの<strong>保守的なリタイアメント戦略</strong>にぴったりで、配当株をノイズに埋もれず見守れます。ポートフォリオの進捗を自信と明確さをもって確認できるようになります。</p>
+
+<p class="mobile-text" style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">準備は万端です！投資を始めたばかりのあなた向けに、興味のある<strong>ヘルスケアセクター</strong>を学びながら自信を築けるシンプルなツールを用意しています。初心者でも分かりやすいアラートで専門用語に惑わされません。</p>
+
+
+NEWS_SUMMARY_EMAIL_PROMPT:
+ニュースサマリーのメール用 HTML コンテンツを生成してください。これは NEWS_SUMMARY_EMAIL_TEMPLATE の {{newsContent}} プレースホルダーに挿入されます。
+
+要約対象のニュースデータ:
+{{newsData}}
+
+重要な書式要件:
+- マークダウン、コードブロック、バッククォートなしの「純粋な HTML コンテンツ」のみを返す
+- 適切な HTML 見出しや段落を用い、セクションを明確に構成する
+- 次の CSS クラスとスタイルを必ず使用してテンプレートの見た目に合わせる
+
+セクション見出し（"Market Highlights"、"Top Movers" 等のカテゴリ用）:
+<h3 class="mobile-news-title dark-text" style="margin: 30px 0 15px 0; font-size: 18px; font-weight: 600; color: #f8f9fa; line-height: 1.3;">Section Title</h3>
+
+段落（ニュース本文）:
+<p class="mobile-text dark-text-secondary" style="margin: 0 0 20px 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">Content goes here</p>
+
+銘柄・企業の言及:
+<strong style="color: #FDD458;">Stock Symbol</strong> はティッカー用
+<strong style="color: #CCDADC;">Company Name</strong> は企業名用
+
+パフォーマンス指標:
+上昇は 📈、下落は 📉、中立／混在は 📊 を使用
+
+ニュース記事の構成:
+各ニュースアイテムは以下の構造を用いること
+1. 見栄えのする記事コンテナ
+2. 小見出しとしての記事タイトル
+3. 箇条書きの要点（2～3 個の実行可能な示唆）
+4. 文脈説明の「What this means」セクション
+5. 元記事への「Read more」リンク
+6. 記事間の視覚的な区切り
+
+記事コンテナ:
+以下のクリーンでシンプルなコンテナで各記事を包む
+<div class="dark-info-box" style="background-color: #212328; padding: 24px; margin: 20px 0; border-radius: 8px;">
+
+記事タイトル:
+<h4 class="dark-text" style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #FFFFFF; line-height: 1.4;">
+Article Title Here
+</h4>
+
+箇条書き（最低 3 つの簡潔な洞察）:
+以下の書式で、分かりやすい簡潔な説明を（見出しは不要）
+<ul style="margin: 16px 0 20px 0; padding-left: 0; margin-left: 0; list-style: none;">
+  <li class="dark-text-secondary" style="margin: 0 0 16px 0; padding: 0; margin-left: 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">
+    <span style="color: #FDD458; font-weight: bold; font-size: 20px; margin-right: 8px;">•</span>素早く理解できる、明確で簡潔な説明を一文で。
+  </li>
+  <li class="dark-text-secondary" style="margin: 0 0 16px 0; padding: 0; margin-left: 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">
+    <span style="color: #FDD458; font-weight: bold; font-size: 20px; margin-right: 8px;">•</span>主要な数字を交え、それが日常的には何を意味するかを短く説明。
+  </li>
+  <li class="dark-text-secondary" style="margin: 0 0 16px 0; padding: 0; margin-left: 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">
+    <span style="color: #FDD458; font-weight: bold; font-size: 20px; margin-right: 8px;">•</span>このニュースが一般の人のお金にとって何を意味するかのシンプルな要点。
+  </li>
+</ul>
+
+インサイトセクション:
+簡単な文脈説明を追加
+<div style="background-color: #141414; border: 1px solid #374151; padding: 15px; border-radius: 6px; margin: 16px 0;">
+<p class="dark-text-secondary" style="margin: 0; font-size: 14px; color: #CCDADC; line-height: 1.4;">💡 <strong style="color: #FDD458;">Bottom Line:</strong> このニュースが日常的な金銭面でなぜ重要なのかを、誰にでも分かる言葉で簡潔に説明。</p>
+</div>
+
+「続きを読む」ボタン:
+<div style="margin: 20px 0 0 0;">
+<a href="ARTICLE_URL" style="color: #FDD458; text-decoration: none; font-weight: 500; font-size: 14px;" target="_blank" rel="noopener noreferrer">Read Full Story →</a>
+</div>
+
+記事の区切り:
+各記事コンテナを閉じる
+</div>
+
+セクション間の区切り:
+主要セクション間には以下を使用
+<div style="border-top: 1px solid #374151; margin: 32px 0 24px 0;"></div>
+
+コンテンツ作成ガイドライン:
+- ニュースを論理的なセクションに整理し、アイコンを活用（📊 Market Overview、📈 Top Gainers、📉 Top Losers、🔥 Breaking News、💼 Earnings Reports、🏛️ Economic Data 等）
+- セクション見出しは繰り返さないこと — メール内で各セクションタイプは 1 回のみ
+- 各ニュース記事には、ニュースデータの実際の見出し／タイトルを含める
+- 箇条書きは最低 3 点（"Key Takeaways" 等の見出しは付けず、箇条書きから開始）
+- 各箇条書きは「短く・分かりやすく」— できれば 1 文で明快に
+- 平易な英語（または分かりやすい言葉）を用い、専門用語や金融業界の内輪表現は避ける
+- 投資初心者に話すつもりで概念を説明する
+- 具体的な数字を含めるが、それが何を意味するかを日常言語で説明
+- 「Bottom Line（要点）」の文脈を、誰にでも理解できる言葉で追加
+- 黄の箇条書きを使い、読みやすいクリーンな軽いデザインにする
+- 記事ごとに読みやすい余白と構造でスキャンしやすく
+- 実際の URL で「Read Full Story」ボタンを必ず含める
+- 一般の人が理解・活用できる「実践的な示唆」を重視
+- ニュースが一般投資家の資産にとって何を意味するかを説明
+- 誰にでも届く会話調・アクセシブルな言葉遣いを優先
+- 詳細な解説よりも、簡潔さと明瞭さを優先
+
+例の構成:
+<h3 class="mobile-news-title dark-text" style="margin: 30px 0 15px 0; font-size: 20px; font-weight: 600; color: #f8f9fa; line-height: 1.3;">📊 Market Overview</h3>
+
+<div class="dark-info-box" style="background-color: #212328; padding: 24px; margin: 20px 0; border-radius: 8px;">
+<h4 class="dark-text" style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #FDD458; line-height: 1.4;">
+Stock Market Had Mixed Results Today
+</h4>
+
+<ul style="margin: 16px 0 20px 0; padding-left: 0; margin-left: 0; list-style: none;">
+  <li class="dark-text-secondary" style="margin: 0 0 16px 0; padding: 0; margin-left: 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">
+    <span style="color: #FDD458; font-weight: bold; font-size: 20px; margin-right: 8px;">•</span>Apple などのテック株は本日 1.2% 上昇し、テック投資家にとって好材料となりました。
+  </li>
+  <li class="dark-text-secondary" style="margin: 0 0 16px 0; padding: 0; margin-left: 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">
+    <span style="color: #FDD458; font-weight: bold; font-size: 20px; margin-right: 8px;">•</span>伝統的な企業は 0.3% 下落し、現在はテックが好まれている傾向が見られます。
+  </li>
+  <li class="dark-text-secondary" style="margin: 0 0 16px 0; padding: 0; margin-left: 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">
+    <span style="color: #FDD458; font-weight: bold; font-size: 20px; margin-right: 8px;">•</span>出来高は 124 億株と高水準で、投資家の自信と活発な取引姿勢が示されました。
+  </li>
+</ul>
+
+<div style="background-color: #141414; border: 1px solid #374151; padding: 15px; border-radius: 6px; margin: 16px 0;">
+<p class="dark-text-secondary" style="margin: 0; font-size: 14px; color: #CCDADC; line-height: 1.4;">💡 <strong style="color: #FDD458;">Bottom Line:</strong> テック株を保有しているなら今日は好調でした。投資を検討している場合、今はテック企業が賢明な選択かもしれません。</p>
+</div>
+
+<div style="margin: 20px 0 0 0;">
+<a href="ARTICLE_URL" style="color: #FDD458; text-decoration: none; font-weight: 500; font-size: 14px;" target="_blank" rel="noopener noreferrer">Read Full Story →</a>
+</div>

@@ -32,7 +32,7 @@ const SignUp = () => {
             const result = await signUpWithEmail(data);
             if (result.success) router.push('/')
         } catch (error) {
-            console.log()
+            console.error(error);
             toast('Sign up failed', {
                 description: error instanceof Error ? error.message : 'Failed to create an account. Please try again later.',
             })
@@ -61,7 +61,7 @@ const SignUp = () => {
                     error={errors.email}
                     validation={{
                         required: 'Email is required',
-                        pattern: /^\w+@\w+\.\w+$/,
+                        pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                         message: 'Email address is required'
                     }}
                 />
@@ -106,8 +106,8 @@ const SignUp = () => {
 
                 <SelectField
                     name="preferredIndustry"
-                    label="Preferred Indastry"
-                    placeholder="Select your preferred indastry"
+                    label="Preferred Industry"
+                    placeholder="Select your preferred Industry"
                     options={PREFERRED_INDUSTRIES}
                     control={control}
                     error={errors.preferredIndustry}
@@ -123,4 +123,4 @@ const SignUp = () => {
         </>
     )
 }
-export default SignUp
+export default SignUp;
