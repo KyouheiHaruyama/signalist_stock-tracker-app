@@ -8,6 +8,9 @@ export function cn(...inputs: ClassValue[]) {
 export const formatTimeAgo = (timestamp: number) => {
     const now = Date.now();
     const diffInMs = now - timestamp * 1000; // Convert to milliseconds
+
+    if (diffInMs < 0) return 'Just now';
+
     const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
     const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
 
@@ -128,11 +131,3 @@ export const getAlertText = (alert: Alert) => {
     const condition = alert.alertType === 'upper' ? '>' : '<';
     return `Price ${condition} ${formatPrice(alert.threshold)}`;
 };
-
-export const getFormattedTodayDate = () => new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    timeZone: 'UTC',
-});
