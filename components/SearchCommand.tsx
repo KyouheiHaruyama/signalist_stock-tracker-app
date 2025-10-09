@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {
   CommandDialog,
   CommandInput,
@@ -33,18 +33,29 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
 
+  const latestQueryRef = useRef('');
   const handleSearch = async () => {
-      if (!isSearchMode) return setStocks(initialStocks);
+      const trimmed = searchTerm.trim();
+      latestQueryRef.current = trimmed;
+
+      if (!trimmed) {
+          setStocks(initialStocks);
+          setLoading(false);
+          return;
+      }
 
       setLoading(true);
 
       try {
-        const results = await searchStocks(searchTerm.trim());
+        const results = await searchStocks(trimmed);
+        if (latestQueryRef.current !== trimmed) return;
         setStocks(results);
       } catch (error) {
-        setStocks([]);
+          console.error('Error searching stocks:', error);
+          if (latestQueryRef.current !== trimmed) return;
+            setStocks([]);
       } finally {
-        setLoading(false);
+          setLoading(false);
       }
   };
 
@@ -86,28 +97,30 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
                       {isSearchMode ? 'No results found' : 'No stocks available'}
                   </div>
               ) : (
-                  <ul>
-                      <div className="search-count">
-                          {isSearchMode ? 'Search results' : 'Popular stocks'}
-                          {` `}({displayStocks?.length || 0})
-                      </div>
-                      {displayStocks?.map((stock, i) => (
-                          <li key={stock.symbol} className="search-item">
-                            <Link href={`/stock/${stock.symbol}`} onClick={handleSelectStock} className="search-item-link">
-                                <TrendingUp className="h-4 w-4 text-gray-500" />
-                                <div className="flex-1">
-                                    <div className="search-item-name">
-                                        {stock.name}
+                  <>
+                      <ul>
+                          <div className="search-count">
+                              {isSearchMode ? 'Search results' : 'Popular stocks'}
+                              {` `}({displayStocks?.length || 0})
+                          </div>
+                          {displayStocks?.map((stock, i) => (
+                              <li key={stock.symbol} className="search-item">
+                                <Link href={`/stock/${stock.symbol}`} onClick={handleSelectStock} className="search-item-link">
+                                    <TrendingUp className="h-4 w-4 text-gray-500" />
+                                    <div className="flex-1">
+                                        <div className="search-item-name">
+                                            {stock.name}
+                                        </div>
+                                        <div className="text-sm text-gray-500">
+                                            {stock.symbol} | {stock.exchange} | {stock.type}
+                                        </div>
                                     </div>
-                                    <div className="text-sm text-gray-500">
-                                        {stock.symbol} | {stock.exchange} | {stock.type}
-                                    </div>
-                                </div>
-                                {/*<Star />*/}
-                            </Link>
-                          </li>
-                      ))}
-                  </ul>
+                                    {/*<Star />*/}
+                                </Link>
+                              </li>
+                          ))}
+                      </ul>
+                  </>
               )}
           </CommandList>
         </CommandDialog>
