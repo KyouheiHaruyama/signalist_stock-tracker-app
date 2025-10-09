@@ -1,6 +1,6 @@
 We need to set up a watchlist system for our app. Here’s what you should build:
 
-1. Watchlist model (/database/models/watchlist.model.ts)
+1. Watchlist model (/database/models/watchlist.models.ts)
 
 * Create a Mongoose schema for a Watchlist collection.
 * Fields:
